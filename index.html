@@ -1,0 +1,160 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agenda Académica y Personal</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; }
+    header { background-color: #e8491d; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { margin: 0; font-size: 24px; }
+    nav a { color: white; margin-left: 20px; text-decoration: none; font-weight: bold; }
+    .hero {
+      background-image: url('https://wallpapers.com/images/hd/boy-studying-with-moonlight-study-aesthetic-na9lvbq3o682akx9.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      padding: 20px;
+    }
+    section { padding: 40px 20px; max-width: 1000px; margin: auto; }
+    .cards { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+    .card {
+      background-color: #f4f4f4;
+      padding: 20px;
+      border-radius: 8px;
+      width: 280px;
+      text-align: center;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Agenda Digital</h1>
+    <nav>
+      <a href="#servicios">Funciones</a>
+      <a href="#ventajas">Ventajas</a>
+      <a href="#acceso">Acceso</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h2>Organiza tu vida universitaria con facilidad</h2>
+      <p>Tu calendario personal y académico en un solo lugar</p>
+    </div>
+  </div>
+
+  <section id="servicios">
+    <h2>Funciones</h2>
+    <div class="cards">
+      <div class="card">🗕️ Gestión de eventos (clases, exámenes, entregas)</div>
+      <div class="card">✅ Registro y control de tareas con prioridad</div>
+      <div class="card">📧 Recordatorios automáticos por correo</div>
+      <div class="card">👥 Administración de usuarios (estudiantes y admins)</div>
+    </div>
+  </section>
+
+  <section id="ventajas">
+    <h2>¿Por qué usar nuestra Agenda?</h2>
+    <div class="cards">
+      <div class="card">⚡ Organización eficiente de tus actividades</div>
+      <div class="card">⏰ Recordatorios y alertas en tiempo real</div>
+      <div class="card">🔐 Historial de accesos para mayor seguridad</div>
+    </div>
+  </section>
+
+  <section id="acceso">
+    <h2 id="form-title">Iniciar sesión</h2>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Correo institucional" required />
+      <input type="password" id="login-password" placeholder="Contraseña" required />
+      <button type="submit">Ingresar</button>
+    </form>
+
+    <form id="register-form" class="hidden">
+      <input type="email" id="register-email" placeholder="Correo institucional" required />
+      <input type="password" id="register-password" placeholder="Crea una contraseña" required />
+      <button type="submit">Registrarse</button>
+    </form>
+
+    <p id="toggle-text">¿No tienes una cuenta? <a href="#" onclick="toggleForms()">Regístrate aquí</a></p>
+    <p id="message" style="color: green;"></p>
+  </section>
+
+  <footer>
+    &copy; 2025 Agenda Digital Académica y Personal - Universidad Nacional Mayor de San Marcos
+  </footer>
+
+  <script>
+    function toggleForms() {
+      const login = document.getElementById("login-form");
+      const register = document.getElementById("register-form");
+      const title = document.getElementById("form-title");
+      const toggle = document.getElementById("toggle-text");
+      login.classList.toggle("hidden");
+      register.classList.toggle("hidden");
+      if (login.classList.contains("hidden")) {
+        title.textContent = "Regístrate";
+        toggle.innerHTML = '¿Ya tienes una cuenta? <a href="#" onclick="toggleForms()">Inicia sesión aquí</a>';
+      } else {
+        title.textContent = "Iniciar sesión";
+        toggle.innerHTML = '¿No tienes una cuenta? <a href="#" onclick="toggleForms()">Regístrate aquí</a>';
+      }
+    }
+
+    document.getElementById("register-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+      if (localStorage.getItem(email)) {
+        showMessage("Ya existe una cuenta con este correo", "red");
+      } else {
+        localStorage.setItem(email, password);
+        showMessage("Usuario registrado exitosamente. Ahora inicia sesión.");
+        toggleForms();
+      }
+    });
+
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      const storedPassword = localStorage.getItem(email);
+      if (storedPassword && storedPassword === password) {
+        showMessage("Bienvenido, acceso exitoso.");
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1000);
+      } else {
+        showMessage("Correo o contraseña incorrectos", "red");
+      }
+    });
+
+    function showMessage(msg, color = "green") {
+      const el = document.getElementById("message");
+      el.style.color = color;
+      el.textContent = msg;
+    }
+  </script>
+</body>
+</html>
